@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+<!-- head tag -->
+{% block title %}Create new chat{% endblock %}
+
+<!-- body tag -->
+{% block content %}
+    <h1>Create new chat</h1>
+    <form action="{{ url_for('new_chat') }}" method="POST">
+        <div>
+            <label for="chat_name">Create chat name:</label>
+            <input type="text" id="chat_name" name="chat_name" required>
+        </div>
+        <div>
+            <label for="chat_type">Chat type:</label>
+            <select id="chat_type" name="chat_type">
+                <option value="0">Individual</option>
+                <option value="1">Group</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit">Create chat</button>
+        </div>
+    </form>
+{% endblock %}

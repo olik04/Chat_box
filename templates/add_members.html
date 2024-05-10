@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+<!-- head tag -->
+{% block title %}Add members{% endblock %}
+
+<!-- body tag -->
+{% block content %}
+    <h1>Add members to chat</h1>
+    <form action="{{ url_for('add_members', chat_id=chat_id) }}" method="POST">
+        <div id="select-members">
+            <h4>Choose new member(s):</h4>
+            <input type="number" name="cnt" id="members-cnt" style="display: none;">
+            <!-- <select class="member" name="member"> -->
+                <!-- Options are added by JS on page load -->
+            <!-- </select> -->
+
+        </div>
+        <div>
+            <h4 id="members-cnt-text">Total number of members to be added: 0</h4>
+            <button type="button" id="add-btn" onclick="addSelectMember();">Add member</button>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block additinal_tags_body %}
+<script>
+    var apiUsersUrl = "{{ url_for('get_users') }}";
+
+    function addSelectMember() {
+        const membersCntText = document.getElementById('members-cnt-text');
+        let cnt = ++document.getElementById('members-cnt').value;
+        document.getElementById('members-cnt').value = cnt;
+
+        const membersList = document.getElementById('select-members');
+        const selectItem = document.createElement('select');
+        selectItem.classList.add('member');
+        selectItem.id = `member-${cnt}`;
+        selectItem.name = `member-${cnt}`;
+
+        document.getElementById('select-members').appendChild(selectItem);
+        fetchUsers(cnt);
+        membersCntText.innerHTML = `Total number of members to be added: ${cnt}`;
+    }
+
+    function fetchUsers(num) {
+        fetch(apiUsersUrl)
+            .then(response => response.json())
+            .then(data => {
+                const userList = document.getElementById(`member-${num}`);
+                data.forEach(user => {
+                    const item = document.createElement('option');
+                    item.value = user.username;
+                    item.textContent = user.username;
+                    userList.appendChild(item);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
+    }
+
+    // document.addEventListener('DOMContentLoaded', () => {
+    //     fetchUsers();
+    // });
+</script>
+{% endblock %}
