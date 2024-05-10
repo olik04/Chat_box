@@ -1,0 +1,3 @@
+# Ignore specific file
+static/js/base_chat.js
+static/css/old_chat_menu.css
